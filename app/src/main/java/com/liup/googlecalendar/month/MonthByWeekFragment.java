@@ -53,8 +53,10 @@ import com.liup.googlecalendar.R;
 import com.liup.googlecalendar.Utils;
 import com.liup.googlecalendar.event.CreateEventDialogFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -147,9 +149,9 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
                 mLoader.setUri(mEventUri);
                 mLoader.startLoading();
                 mLoader.onContentChanged();
-                if (Log.isLoggable(TAG, Log.DEBUG)) {
-                    Log.d(TAG, "Started loader with uri: " + mEventUri);
-                }
+//                if (Log.isLoggable(TAG, Log.DEBUG)) {
+                Log.d(TAG, "Started loader with uri: " + mEventUri);
+//                }
             }
         }
     };
@@ -158,8 +160,7 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
         @Override
         public void run() {
             if (!mIsDetached) {
-                mLoader = (CursorLoader) getLoaderManager().initLoader(0, null,
-                        MonthByWeekFragment.this);
+                mLoader = (CursorLoader) getLoaderManager().initLoader(0, null, MonthByWeekFragment.this);
             }
         }
     };
@@ -189,6 +190,9 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
         Uri.Builder builder = Instances.CONTENT_URI.buildUpon();
         ContentUris.appendId(builder, start);
         ContentUris.appendId(builder, end);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+        Log.e("查询", builder.build().toString() + "--开始时间：" + sdf.format(new Date(start)) + "--结束时间：" + sdf.format(new Date(end)));
         return builder.build();
     }
 
@@ -222,9 +226,9 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
             mHandler.removeCallbacks(mUpdateLoader);
             if (mLoader != null) {
                 mLoader.stopLoading();
-                if (Log.isLoggable(TAG, Log.DEBUG)) {
-                    Log.d(TAG, "Stopped loader from loading");
-                }
+//                if (Log.isLoggable(TAG, Log.DEBUG)) {
+                Log.d(TAG, "Stopped loader from loading");
+//                }
             }
         }
     }
@@ -347,20 +351,16 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
         }
         CursorLoader loader;
         synchronized (mUpdateLoader) {
-            mFirstLoadedJulianDay =
-                    Time.getJulianDay(mSelectedDay.toMillis(true), mSelectedDay.gmtoff)
-                    - (mNumWeeks * 7 / 2);
+            mFirstLoadedJulianDay = Time.getJulianDay(mSelectedDay.toMillis(true), mSelectedDay.gmtoff) - (mNumWeeks * 7 / 2);
             mEventUri = updateUri();
             String where = updateWhere();
 
-            loader = new CursorLoader(
-                    getActivity(), mEventUri, Event.EVENT_PROJECTION, where,
-                    null /* WHERE_CALENDARS_SELECTED_ARGS */, INSTANCES_SORT_ORDER);
+            loader = new CursorLoader(getActivity(), mEventUri, Event.EVENT_PROJECTION, where,null /* WHERE_CALENDARS_SELECTED_ARGS */, INSTANCES_SORT_ORDER);
             loader.setUpdateThrottle(LOADER_THROTTLE_DELAY);
         }
-        if (Log.isLoggable(TAG, Log.DEBUG)) {
-            Log.d(TAG, "Returning new loader with uri: " + mEventUri);
-        }
+//        if (Log.isLoggable(TAG, Log.DEBUG)) {
+        Log.d(TAG, "Returning new loader with uri: " + mEventUri);
+//        }
         return loader;
     }
 
@@ -384,9 +384,9 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         synchronized (mUpdateLoader) {
-            if (Log.isLoggable(TAG, Log.DEBUG)) {
-                Log.d(TAG, "Found " + data.getCount() + " cursor entries for uri " + mEventUri);
-            }
+//            if (Log.isLoggable(TAG, Log.DEBUG)) {
+            Log.d(TAG, "Found " + data.getCount() + " cursor entries for uri " + mEventUri);
+//            }
             CursorLoader cLoader = (CursorLoader) loader;
             if (mEventUri == null) {
                 mEventUri = cLoader.getUri();
@@ -398,10 +398,8 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
                 return;
             }
             ArrayList<Event> events = new ArrayList<Event>();
-            Event.buildEventsFromCursor(
-                    events, data, mContext, mFirstLoadedJulianDay, mLastLoadedJulianDay);
-            ((MonthByWeekAdapter) mAdapter).setEvents(mFirstLoadedJulianDay,
-                    mLastLoadedJulianDay - mFirstLoadedJulianDay + 1, events);
+            Event.buildEventsFromCursor(events, data, mContext, mFirstLoadedJulianDay, mLastLoadedJulianDay);
+            ((MonthByWeekAdapter) mAdapter).setEvents(mFirstLoadedJulianDay,mLastLoadedJulianDay - mFirstLoadedJulianDay + 1, events);
         }
     }
 
@@ -428,8 +426,8 @@ public class MonthByWeekFragment extends SimpleDayPickerFragment implements
             boolean animate = true;
             if (mDaysPerWeek * mNumWeeks * 2 < Math.abs(
                     Time.getJulianDay(event.selectedTime.toMillis(true), event.selectedTime.gmtoff)
-                    - Time.getJulianDay(mFirstVisibleDay.toMillis(true), mFirstVisibleDay.gmtoff)
-                    - mDaysPerWeek * mNumWeeks / 2)) {
+                            - Time.getJulianDay(mFirstVisibleDay.toMillis(true), mFirstVisibleDay.gmtoff)
+                            - mDaysPerWeek * mNumWeeks / 2)) {
                 animate = false;
             }
             mDesiredDay.set(event.selectedTime);

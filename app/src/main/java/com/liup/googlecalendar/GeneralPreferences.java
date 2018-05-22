@@ -115,7 +115,7 @@ public class GeneralPreferences extends PreferenceFragment implements
     // Default preference values
     public static final int DEFAULT_START_VIEW = CalendarController.ViewType.WEEK;
     public static final int DEFAULT_DETAILED_VIEW = CalendarController.ViewType.DAY;
-    public static final boolean DEFAULT_SHOW_WEEK_NUM = false;
+    public static final boolean DEFAULT_SHOW_WEEK_NUM = true;
     // This should match the XML file.
     public static final String DEFAULT_RINGTONE = "content://settings/system/notification_sound";
 

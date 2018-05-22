@@ -746,8 +746,7 @@ public class MonthWeekEventsView extends SimpleWeekView {
             int yTest = ySquare;
             while (iter.hasNext()) {
                 Event event = iter.next();
-                int newY = drawEvent(canvas, event, xSquare, yTest, rightEdge, iter.hasNext(),
-                        showTimes, /*doDraw*/ false);
+                int newY = drawEvent(canvas, event, xSquare, yTest, rightEdge, iter.hasNext(), showTimes, /*doDraw*/ false);
                 if (newY == yTest) {
                     showTimes = false;
                     break;
@@ -759,8 +758,7 @@ public class MonthWeekEventsView extends SimpleWeekView {
             iter = eventDay.iterator();
             while (iter.hasNext()) {
                 Event event = iter.next();
-                int newY = drawEvent(canvas, event, xSquare, ySquare, rightEdge, iter.hasNext(),
-                        showTimes, /*doDraw*/ true);
+                int newY = drawEvent(canvas, event, xSquare, ySquare, rightEdge, iter.hasNext(),showTimes, /*doDraw*/ true);
                 if (newY == ySquare) {
                     break;
                 }

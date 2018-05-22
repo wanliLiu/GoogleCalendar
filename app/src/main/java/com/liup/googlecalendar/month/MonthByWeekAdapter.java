@@ -129,10 +129,9 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
 
     public void setEvents(int firstJulianDay, int numDays, ArrayList<Event> events) {
         if (mIsMiniMonth) {
-            if (Log.isLoggable(TAG, Log.ERROR)) {
-                Log.e(TAG, "Attempted to set events for mini view. Events only supported in full"
-                        + " view.");
-            }
+//            if (Log.isLoggable(TAG, Log.ERROR)) {
+            Log.e(TAG, "Attempted to set events for mini view. Events only supported in full" + " view.");
+//            }
             return;
         }
         mEvents = events;
@@ -146,7 +145,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
         }
 
         if (events == null || events.size() == 0) {
-            if(Log.isLoggable(TAG, Log.DEBUG)) {
+            if (Log.isLoggable(TAG, Log.DEBUG)) {
                 Log.d(TAG, "No events. Returning early--go schedule something fun.");
             }
             mEventDayList = eventDayList;
@@ -176,7 +175,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
                 }
             }
         }
-        if(Log.isLoggable(TAG, Log.DEBUG)) {
+        if (Log.isLoggable(TAG, Log.DEBUG)) {
             Log.d(TAG, "Processed " + events.size() + " events.");
         }
         mEventDayList = eventDayList;
@@ -211,7 +210,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
                     // There is a bug that causes invalidates to not work some
                     // of the time unless we recreate the view.
                     v = new MonthWeekEventsView(mContext);
-               }
+                }
             } else {
                 drawingParams = (HashMap<String, Integer>) v.getTag();
             }
@@ -232,8 +231,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
             selectedDay = mSelectedDay.weekDay;
         }
 
-        drawingParams.put(SimpleWeekView.VIEW_PARAMS_HEIGHT,
-                (parent.getHeight() + parent.getTop()) / mNumWeeks);
+        drawingParams.put(SimpleWeekView.VIEW_PARAMS_HEIGHT, (parent.getHeight() + parent.getTop()) / mNumWeeks);
         drawingParams.put(SimpleWeekView.VIEW_PARAMS_SELECTED_DAY, selectedDay);
         drawingParams.put(SimpleWeekView.VIEW_PARAMS_SHOW_WK_NUM, mShowWeekNumber ? 1 : 0);
         drawingParams.put(SimpleWeekView.VIEW_PARAMS_WEEK_START, mFirstDayOfWeek);
@@ -254,9 +252,9 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
 
     private void sendEventsToView(MonthWeekEventsView v) {
         if (mEventDayList.size() == 0) {
-            if (Log.isLoggable(TAG, Log.DEBUG)) {
-                Log.d(TAG, "No events loaded, did not pass any events to view.");
-            }
+//            if (Log.isLoggable(TAG, Log.DEBUG)) {
+            Log.d(TAG, "No events loaded, did not pass any events to view.");
+//            }
             v.setEvents(null, null);
             return;
         }
@@ -264,10 +262,9 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
         int start = viewJulianDay - mFirstJulianDay;
         int end = start + v.mNumDays;
         if (start < 0 || end > mEventDayList.size()) {
-            if (Log.isLoggable(TAG, Log.DEBUG)) {
-                Log.d(TAG, "Week is outside range of loaded events. viewStart: " + viewJulianDay
-                        + " eventsStart: " + mFirstJulianDay);
-            }
+//            if (Log.isLoggable(TAG, Log.DEBUG)) {
+            Log.d(TAG, "Week is outside range of loaded events. viewStart: " + viewJulianDay + " eventsStart: " + mFirstJulianDay);
+//            }
             v.setEvents(null, null);
             return;
         }
@@ -287,7 +284,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
     @Override
     protected void onDayTapped(Time day) {
         setDayParameters(day);
-         if (mShowAgendaWithMonth || mIsMiniMonth) {
+        if (mShowAgendaWithMonth || mIsMiniMonth) {
             // If agenda view is visible with month view , refresh the views
             // with the selected day's info
             mController.sendEvent(mContext, EventType.GO_TO, day, day, -1,
@@ -296,7 +293,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
             // Else , switch to the detailed view
             mController.sendEvent(mContext, EventType.GO_TO, day, day, -1,
                     ViewType.DETAIL,
-                            CalendarController.EXTRA_GOTO_DATE
+                    CalendarController.EXTRA_GOTO_DATE
                             | CalendarController.EXTRA_GOTO_BACK_TO_PREVIOUS, null, null);
         }
     }
@@ -333,7 +330,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
             // On Up/scroll/move/cancel: hide the "clicked" color.
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
-                    mClickedView = (MonthWeekEventsView)v;
+                    mClickedView = (MonthWeekEventsView) v;
                     mClickedXLocation = event.getX();
                     mClickTime = System.currentTimeMillis();
                     mListView.postDelayed(mDoClick, mOnDownDelay);
@@ -341,12 +338,12 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_SCROLL:
                 case MotionEvent.ACTION_CANCEL:
-                    clearClickedView((MonthWeekEventsView)v);
+                    clearClickedView((MonthWeekEventsView) v);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     // No need to cancel on vertical movement, ACTION_SCROLL will do that.
                     if (Math.abs(event.getX() - mClickedXLocation) > mMovedPixelToCancel) {
-                        clearClickedView((MonthWeekEventsView)v);
+                        clearClickedView((MonthWeekEventsView) v);
                     }
                     break;
                 default:
@@ -379,14 +376,14 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
                 }
                 mLongClickedView.clearClickedDay();
                 mLongClickedView = null;
-             }
+            }
         }
     }
 
     // Clear the visual cues of the click animation and related running code.
     private void clearClickedView(MonthWeekEventsView v) {
         mListView.removeCallbacks(mDoClick);
-        synchronized(v) {
+        synchronized (v) {
             v.clearClickedDay();
         }
         mClickedView = null;
@@ -398,7 +395,7 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
         @Override
         public void run() {
             if (mClickedView != null) {
-                synchronized(mClickedView) {
+                synchronized (mClickedView) {
                     mClickedView.setClickedDay(mClickedXLocation);
                 }
                 mLongClickedView = mClickedView;
@@ -417,9 +414,9 @@ public class MonthByWeekAdapter extends SimpleWeeksAdapter {
         public void run() {
             if (mSingleTapUpView != null) {
                 Time day = mSingleTapUpView.getDayFromLocation(mClickedXLocation);
-                if (Log.isLoggable(TAG, Log.DEBUG)) {
-                    Log.d(TAG, "Touched day at Row=" + mSingleTapUpView.mWeek + " day=" + day.toString());
-                }
+//                if (Log.isLoggable(TAG, Log.DEBUG)) {
+                Log.d(TAG, "Touched day at Row=" + mSingleTapUpView.mWeek + " day=" + day.toString());
+//                }
                 if (day != null) {
                     onDayTapped(day);
                 }

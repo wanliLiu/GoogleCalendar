@@ -625,8 +625,7 @@ public class Utils {
      */
     public static int getFirstDayOfWeek(Context context) {
         SharedPreferences prefs = GeneralPreferences.getSharedPreferences(context);
-        String pref = prefs.getString(
-                GeneralPreferences.KEY_WEEK_START_DAY, GeneralPreferences.WEEK_START_DEFAULT);
+        String pref = prefs.getString(GeneralPreferences.KEY_WEEK_START_DAY, GeneralPreferences.WEEK_START_DEFAULT);
 
         int startDay;
         if (GeneralPreferences.WEEK_START_DEFAULT.equals(pref)) {
